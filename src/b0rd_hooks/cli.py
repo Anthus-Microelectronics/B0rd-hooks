@@ -10,11 +10,13 @@ from pathlib import Path
 from b0rd_hooks import __version__
 from b0rd_hooks.companion import (
     antigravity_adapter_command,
+    codex_adapter_command,
     cursor_adapter_command,
     resolve_companion_root,
 )
 from b0rd_hooks.ide import IMPLEMENTED, normalize_ides
 from b0rd_hooks.ide import antigravity as antigravity_mod
+from b0rd_hooks.ide import codex as codex_mod
 from b0rd_hooks.ide import cursor as cursor_mod
 from b0rd_hooks.state import load_state, remove_install, save_state, upsert_install
 
@@ -51,6 +53,12 @@ def _cmd_install(args: argparse.Namespace) -> int:
             upsert_install(state, record)
             print(f"ok: antigravity ({args.scope}) -> {record.config_path}")
             print(f"    command: {command}")
+        elif ide == "codex":
+            command = codex_adapter_command(companion)
+            record = codex_mod.install(args.scope, command, workspace=workspace)
+            upsert_install(state, record)
+            print(f"ok: codex ({args.scope}) -> {record.config_path}")
+            print(f"    command: {command}")
         else:
             print(f"skip: {ide} not implemented", file=sys.stderr)
 
@@ -77,6 +85,12 @@ def _cmd_uninstall(args: argparse.Namespace) -> int:
                 print(f"ok: removed antigravity hooks ({args.scope})")
             else:
                 print(f"ok: no antigravity b0rd hooks found ({args.scope})")
+            remove_install(state, ide, args.scope)
+        elif ide == "codex":
+            if codex_mod.uninstall(args.scope, workspace=workspace):
+                print(f"ok: removed codex hooks ({args.scope})")
+            else:
+                print(f"ok: no codex b0rd hooks found ({args.scope})")
             remove_install(state, ide, args.scope)
         else:
             print(f"skip: {ide} not implemented", file=sys.stderr)
@@ -110,6 +124,16 @@ def _cmd_status(args: argparse.Namespace) -> int:
                 info = antigravity_mod.status(scope, workspace=ws)
                 flag = "yes" if info["installed"] else "no"
                 print(f"antigravity/{scope}: {flag} ({info['config_path']}) events={len(info['events'])}")
+        elif ide == "codex":
+            for scope in ("user", "project"):
+                if args.scope and args.scope != scope:
+                    continue
+                ws = workspace if scope == "project" else None
+                if scope == "project" and ws is None:
+                    continue
+                info = codex_mod.status(scope, workspace=ws)
+                flag = "yes" if info["installed"] else "no"
+                print(f"codex/{scope}: {flag} ({info['config_path']}) events={len(info['events'])}")
     return 0
 
 
@@ -121,6 +145,7 @@ def _cmd_doctor(args: argparse.Namespace) -> int:
         print(f"companion: {companion}")
         print(f"cursor adapter: {cursor_adapter_command(companion)}")
         print(f"antigravity adapter: {antigravity_adapter_command(companion)}")
+        print(f"codex adapter: {codex_adapter_command(companion)}")
     except FileNotFoundError as exc:
         print(f"companion: MISSING ({exc})")
         ok = False
@@ -137,6 +162,12 @@ def _cmd_doctor(args: argparse.Namespace) -> int:
     print(f"cursor/user: {'installed' if user['installed'] else 'not installed'}")
     agy = antigravity_mod.status("user")
     print(f"antigravity/user: {'installed' if agy['installed'] else 'not installed'}")
+    codex = codex_mod.status("user")
+    print(f"codex/user: {'installed' if codex['installed'] else 'not installed'}")
+    codex_hooks = Path.home() / ".codex" / "hooks.json"
+    if codex_hooks.is_file():
+        print(f"codex hooks file: {codex_hooks}")
+    print("codex note: trust hooks in Codex via `/hooks` after first install")
     return 0 if ok else 1
 
 
