@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "b0rd-hooks"
-version = "0.2.0"
+version = "0.2.1"
 description = "Install B0RD agent-notify hooks for Cursor, Claude Code, Codex, and Antigravity"
 readme = "README.md"
 license = { text = "MIT" }
