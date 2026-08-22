@@ -17,7 +17,9 @@ CODEX_EVENTS: tuple[str, ...] = (
     "UserPromptSubmit",
     "PreToolUse",
     "PostToolUse",
+    "PermissionRequest",
     "PreCompact",
+    "PostCompact",
     "SubagentStart",
     "SubagentStop",
     "Stop",
@@ -27,10 +29,12 @@ MATCHER_EVENTS = frozenset(
     {
         "PreToolUse",
         "PostToolUse",
+        "PermissionRequest",
         "SessionStart",
         "SubagentStart",
         "SubagentStop",
         "PreCompact",
+        "PostCompact",
     }
 )
 
