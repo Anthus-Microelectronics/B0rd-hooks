@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "b0rd-hooks"
+version = "0.1.0"
+description = "Install B0RD agent-notify hooks for Cursor, Claude Code, Codex, and Antigravity"
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.9"
+authors = [{ name = "Anthus Microelectronics" }]
+keywords = ["b0rd", "cursor", "hooks", "agent-monitoring"]
+classifiers = [
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+]
+
+[project.scripts]
+b0rd-hooks = "b0rd_hooks.cli:main"
+
+[project.optional-dependencies]
+dev = ["pytest>=7.0"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
