@@ -6,7 +6,8 @@ import os
 from pathlib import Path
 
 COMPANION_DIRNAME = "b0rd-scene-agent-monitor"
-HOOK_SCRIPT = "adapters/cursor/b0rd-agent-notify.sh"
+CURSOR_HOOK_SCRIPT = "adapters/cursor/b0rd-agent-notify.sh"
+AGY_HOOK_SCRIPT = "adapters/antigravity/b0rd-agent-notify.sh"
 CORE_HOOK = "core/hook.py"
 
 
@@ -24,7 +25,9 @@ def default_search_roots(cwd: Path | None = None) -> list[Path]:
 
 
 def is_companion_root(path: Path) -> bool:
-    return (path / CORE_HOOK).is_file() and (path / HOOK_SCRIPT).is_file()
+    if not (path / CORE_HOOK).is_file():
+        return False
+    return (path / CURSOR_HOOK_SCRIPT).is_file() or (path / AGY_HOOK_SCRIPT).is_file()
 
 
 def resolve_companion_root(explicit: str | None = None, cwd: Path | None = None) -> Path:
@@ -43,4 +46,8 @@ def resolve_companion_root(explicit: str | None = None, cwd: Path | None = None)
 
 
 def cursor_adapter_command(companion_root: Path) -> str:
-    return str((companion_root / HOOK_SCRIPT).resolve())
+    return str((companion_root / CURSOR_HOOK_SCRIPT).resolve())
+
+
+def antigravity_adapter_command(companion_root: Path) -> str:
+    return str((companion_root / AGY_HOOK_SCRIPT).resolve())

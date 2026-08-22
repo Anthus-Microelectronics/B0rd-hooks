@@ -5,7 +5,7 @@ from __future__ import annotations
 from b0rd_hooks.ide import cursor as cursor_mod
 
 SUPPORTED = ("cursor", "claude", "codex", "antigravity")
-IMPLEMENTED = frozenset({"cursor"})
+IMPLEMENTED = frozenset({"cursor", "antigravity"})
 
 
 def normalize_ides(ides: list[str] | None) -> list[str]:

@@ -28,7 +28,7 @@ tail -f /tmp/b0rd-agent-hook-payload.log
 
 | Command | Purpose |
 | --- | --- |
-| `b0rd-hooks install` | Install hooks (default: `--scope user`, Cursor only in v0.1) |
+| `b0rd-hooks install` | Install hooks (default: `--scope user`, Cursor + Antigravity) |
 | `b0rd-hooks install --scope project --workspace /path/to/repo` | Project hooks (required for Cursor cloud/private-worker agents) |
 | `b0rd-hooks uninstall` | Remove b0rd-managed hook entries only |
 | `b0rd-hooks status` | Show installed IDEs and config paths |
@@ -37,7 +37,7 @@ tail -f /tmp/b0rd-agent-hook-payload.log
 ### Options
 
 - `--companion-root` — path to `b0rd-scene-agent-monitor` (or set `B0RD_AGENT_COMPANION_ROOT`)
-- `--ides cursor claude codex antigravity` — filter IDEs (Claude/Codex/Antigravity: phase 2+)
+- `--ides cursor antigravity claude codex` — filter IDEs (Claude/Codex: phase 2+)
 
 ## IDE config paths
 
@@ -48,7 +48,15 @@ tail -f /tmp/b0rd-agent-hook-payload.log
 | Codex | `~/.codex/hooks.json` | `.codex/hooks.json` |
 | Antigravity | `~/.gemini/config/hooks.json` | `.agents/hooks.json` |
 
-**v0.1** implements Cursor install/uninstall. Other IDEs are planned; the CLI accepts `--ides` but skips unimplemented targets.
+**v0.2** implements Cursor and Antigravity install/uninstall. Claude Code and Codex are planned; the CLI accepts `--ides` but skips unimplemented targets.
+
+### Antigravity
+
+User-level hooks live in `~/.gemini/config/hooks.json` under the `b0rd-agent-monitor` group. Events: `PreInvocation`, `PostInvocation`, `PreToolUse`, `PostToolUse`, `Stop`. The adapter is fail-open (`PreToolUse` returns `{"decision":"allow"}`). See [Antigravity hooks docs](https://antigravity.google/docs/ide/hooks/).
+
+```bash
+b0rd-hooks install --ides antigravity --scope user
+```
 
 ## Cloud Cursor agents
 

@@ -8,8 +8,13 @@ import sys
 from pathlib import Path
 
 from b0rd_hooks import __version__
-from b0rd_hooks.companion import cursor_adapter_command, resolve_companion_root
+from b0rd_hooks.companion import (
+    antigravity_adapter_command,
+    cursor_adapter_command,
+    resolve_companion_root,
+)
 from b0rd_hooks.ide import IMPLEMENTED, normalize_ides
+from b0rd_hooks.ide import antigravity as antigravity_mod
 from b0rd_hooks.ide import cursor as cursor_mod
 from b0rd_hooks.state import load_state, remove_install, save_state, upsert_install
 
@@ -30,15 +35,21 @@ def _cmd_install(args: argparse.Namespace) -> int:
         print(f"error: {exc}", file=sys.stderr)
         return 1
 
-    command = cursor_adapter_command(companion)
     state = load_state()
     state.companion_root = str(companion)
 
     for ide in ides:
         if ide == "cursor":
+            command = cursor_adapter_command(companion)
             record = cursor_mod.install(args.scope, command, workspace=workspace)
             upsert_install(state, record)
             print(f"ok: cursor ({args.scope}) -> {record.config_path}")
+            print(f"    command: {command}")
+        elif ide == "antigravity":
+            command = antigravity_adapter_command(companion)
+            record = antigravity_mod.install(args.scope, command, workspace=workspace)
+            upsert_install(state, record)
+            print(f"ok: antigravity ({args.scope}) -> {record.config_path}")
             print(f"    command: {command}")
         else:
             print(f"skip: {ide} not implemented", file=sys.stderr)
@@ -60,6 +71,12 @@ def _cmd_uninstall(args: argparse.Namespace) -> int:
                 print(f"ok: removed cursor hooks ({args.scope})")
             else:
                 print(f"ok: no cursor b0rd hooks found ({args.scope})")
+            remove_install(state, ide, args.scope)
+        elif ide == "antigravity":
+            if antigravity_mod.uninstall(args.scope, workspace=workspace):
+                print(f"ok: removed antigravity hooks ({args.scope})")
+            else:
+                print(f"ok: no antigravity b0rd hooks found ({args.scope})")
             remove_install(state, ide, args.scope)
         else:
             print(f"skip: {ide} not implemented", file=sys.stderr)
@@ -83,15 +100,27 @@ def _cmd_status(args: argparse.Namespace) -> int:
                 info = cursor_mod.status(scope, workspace=ws)
                 flag = "yes" if info["installed"] else "no"
                 print(f"cursor/{scope}: {flag} ({info['config_path']}) events={len(info['events'])}")
+        elif ide == "antigravity":
+            for scope in ("user", "project"):
+                if args.scope and args.scope != scope:
+                    continue
+                ws = workspace if scope == "project" else None
+                if scope == "project" and ws is None:
+                    continue
+                info = antigravity_mod.status(scope, workspace=ws)
+                flag = "yes" if info["installed"] else "no"
+                print(f"antigravity/{scope}: {flag} ({info['config_path']}) events={len(info['events'])}")
     return 0
 
 
 def _cmd_doctor(args: argparse.Namespace) -> int:
     ok = True
+    companion = None
     try:
         companion = resolve_companion_root(args.companion_root)
         print(f"companion: {companion}")
-        print(f"adapter:  {cursor_adapter_command(companion)}")
+        print(f"cursor adapter: {cursor_adapter_command(companion)}")
+        print(f"antigravity adapter: {antigravity_adapter_command(companion)}")
     except FileNotFoundError as exc:
         print(f"companion: MISSING ({exc})")
         ok = False
@@ -106,6 +135,8 @@ def _cmd_doctor(args: argparse.Namespace) -> int:
 
     user = cursor_mod.status("user")
     print(f"cursor/user: {'installed' if user['installed'] else 'not installed'}")
+    agy = antigravity_mod.status("user")
+    print(f"antigravity/user: {'installed' if agy['installed'] else 'not installed'}")
     return 0 if ok else 1
 
 
