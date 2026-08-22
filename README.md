@@ -50,6 +50,8 @@ tail -f /tmp/b0rd-agent-hook-payload.log
 
 **v0.2** implements Cursor and Antigravity install/uninstall. Claude Code and Codex are planned; the CLI accepts `--ides` but skips unimplemented targets.
 
+Requires **b0rd-scene-agent-monitor** `develop` (2026-08-22+) for Antigravity session titles and rich tool messages.
+
 ### Antigravity
 
 User-level hooks live in `~/.gemini/config/hooks.json` under the `b0rd-agent-monitor` group. Events: `PreInvocation`, `PostInvocation`, `PreToolUse`, `PostToolUse`, `Stop`. The adapter is fail-open (`PreToolUse` returns `{"decision":"allow"}`). See [Antigravity hooks docs](https://antigravity.google/docs/ide/hooks/).
@@ -57,6 +59,10 @@ User-level hooks live in `~/.gemini/config/hooks.json` under the `b0rd-agent-mon
 ```bash
 b0rd-hooks install --ides antigravity --scope user
 ```
+
+**Session titles:** the companion reads Antigravity's sidebar label from `~/.gemini/antigravity/agyhub_summaries_proto.pb` (keyed by hook `conversationId`), with transcript `# USER Objective:` as fallback — not the raw workspace folder name.
+
+**Tool messages:** notifications use `toolSummary`, command lines, file paths, and search queries when present (e.g. `Shell · List open Kanbus issues` instead of `Tool · run_command`).
 
 ## Cloud Cursor agents
 
