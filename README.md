@@ -1,12 +1,12 @@
 # B0rd-hooks
 
-Public MIT installer for B0RD **agent monitoring** IDE lifecycle hooks.
+Public MIT installer for B0rd **agent monitoring** IDE lifecycle hooks.
 
 Wires [Cursor](https://cursor.com), [Claude Code](https://code.claude.com), [OpenAI Codex](https://developers.openai.com/codex), and [Google Antigravity](https://antigravity.google) hook events to the companion publish pipeline in [`b0rd-scene-agent-monitor`](https://github.com/Anthus-Microelectronics/B0rd-scene-agent-monitor) (`notify.show` + `source=agent`).
 
 ## Quick start
 
-Clone the companion next to B0RD (or anywhere), then install **user-level** hooks (default):
+Clone the companion next to B0rd (or anywhere), then install **user-level** hooks (default):
 
 ```bash
 git clone https://github.com/Anthus-Microelectronics/B0rd-scene-agent-monitor.git ~/Projects/b0rd-scene-agent-monitor
@@ -81,7 +81,7 @@ After install, open Codex and run `/hooks` to **review and trust** the `b0rd-age
 User hooks are **not** loaded in cloud/private-worker runs. For those workspaces:
 
 ```bash
-cd /path/to/B0RD
+cd /path/to/B0rd
 b0rd-hooks install --scope project --workspace .
 ```
 

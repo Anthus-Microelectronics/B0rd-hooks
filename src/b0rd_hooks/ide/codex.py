@@ -9,7 +9,7 @@ from typing import Any
 from b0rd_hooks.state import InstallRecord, is_b0rd_command
 
 CODEX_TIMEOUT = 15
-STATUS_MESSAGE = "B0RD agent notify"
+STATUS_MESSAGE = "B0rd agent notify"
 
 CODEX_EVENTS: tuple[str, ...] = (
     "SessionStart",
@@ -136,7 +136,7 @@ def install(scope: str, command: str, workspace: Path | None = None) -> InstallR
         installed_events.append(event)
 
     if "description" not in doc:
-        doc["description"] = "B0RD agent monitoring hooks (managed by b0rd-hooks)"
+        doc["description"] = "B0rd agent monitoring hooks (managed by b0rd-hooks)"
     _write_json(path, doc)
     return InstallRecord(
         ide="codex",

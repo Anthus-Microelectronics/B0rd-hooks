@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""CLI for installing B0RD agent-notify hooks into IDEs."""
+"""CLI for installing B0rd agent-notify hooks into IDEs."""
 
 from __future__ import annotations
 
@@ -172,7 +172,7 @@ def _cmd_doctor(args: argparse.Namespace) -> int:
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(prog="b0rd-hooks", description="Install B0RD agent-notify IDE hooks")
+    parser = argparse.ArgumentParser(prog="b0rd-hooks", description="Install B0rd agent-notify IDE hooks")
     parser.add_argument("--version", action="version", version=f"%(prog)s {__version__}")
     sub = parser.add_subparsers(dest="command", required=True)
 
