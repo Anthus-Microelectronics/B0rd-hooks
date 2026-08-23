@@ -2,14 +2,14 @@
 
 Public MIT installer for B0RD **agent monitoring** IDE lifecycle hooks.
 
-Wires [Cursor](https://cursor.com), [Claude Code](https://code.claude.com), [OpenAI Codex](https://developers.openai.com/codex), and [Google Antigravity](https://antigravity.google) hook events to the companion publish pipeline in [`b0rd-scene-agent-monitor`](https://github.com/Anthus-Microelectronics/b0rd-scene-agent-monitor) (`notify.show` + `source=agent`).
+Wires [Cursor](https://cursor.com), [Claude Code](https://code.claude.com), [OpenAI Codex](https://developers.openai.com/codex), and [Google Antigravity](https://antigravity.google) hook events to the companion publish pipeline in [`b0rd-scene-agent-monitor`](https://github.com/Anthus-Microelectronics/B0rd-scene-agent-monitor) (`notify.show` + `source=agent`).
 
 ## Quick start
 
 Clone the companion next to B0RD (or anywhere), then install **user-level** hooks (default):
 
 ```bash
-git clone https://github.com/Anthus-Microelectronics/b0rd-scene-agent-monitor.git ~/Projects/b0rd-scene-agent-monitor
+git clone https://github.com/Anthus-Microelectronics/B0rd-scene-agent-monitor.git ~/Projects/b0rd-scene-agent-monitor
 
 pip install git+https://github.com/Anthus-Microelectronics/B0rd-hooks.git
 # or from a checkout: pip install -e /path/to/B0rd-hooks
