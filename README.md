@@ -97,3 +97,7 @@ pip install -e ".[dev]"
 ## License
 
 MIT — see [LICENSE](LICENSE). Desk notify publish logic remains in `b0rd-scene-agent-monitor` (PolyForm Perimeter).
+
+---
+
+Built for [b0rd.info](https://b0rd.info), a desk display from Anthus Microelectronics.
